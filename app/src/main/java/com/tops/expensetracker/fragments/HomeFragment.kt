@@ -17,6 +17,7 @@ import com.tops.expensetracker.databinding.ActivityMainBinding
 import com.tops.expensetracker.databinding.FragmentHomeBinding
 import com.tops.expensetracker.model.ExpenseRoot
 import com.tops.expensetracker.viewmodel.ExpenseViewModel
+import kotlin.math.exp
 
 
 class HomeFragment : Fragment() {
@@ -40,10 +41,31 @@ class HomeFragment : Fragment() {
         expenseviewmodel.loadExpensedata(requireContext())
 
         binding.rvExpense.layoutManager = LinearLayoutManager(requireContext())
-        adapter = MyAdapter(emptyList())
+        adapter = MyAdapter(emptyList(), onDelete = {
+            id-> expenseviewmodel.deleteExpense(requireContext(),id)
+        }, onEdit = { expense->
+//            val action = HomeFragmentDirections.actionHomeFragmentToAddNewExpenseFragment(
+//                expense.id,
+//                expense.title,
+//                expense.amount,
+//                expense.category,
+//                expense.date
+//            )
+//            findNavController().navigate(action)
+
+            val bundle = Bundle().apply {
+                putInt("expenseId", expense.id)
+                putString("title", expense.title)
+                putString("amount", expense.amount)
+                putString("category", expense.category)
+                putString("date", expense.date)
+            }
+
+            findNavController().navigate(R.id.action_homeFragment_to_addNewExpenseFragment, bundle)
+        })
 
         expenseviewmodel.expense.observe(viewLifecycleOwner, Observer{
-            expenselist-> binding.rvExpense.adapter = MyAdapter(expenselist)
+            expenselist->  adapter.submitList(expenselist)
         })
 
         binding.btnaddExp.setOnClickListener {

@@ -1,5 +1,6 @@
 package com.tops.expensetracker.viewmodel
 
+import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import androidx.lifecycle.LiveData
@@ -36,4 +37,21 @@ class ExpenseViewModel: ViewModel() {
         _expense.value = expenselist
     }
 
+    fun deleteExpense(context: Context,expenseId: Int){
+        val db = context.openOrCreateDatabase("expensetracker", Context.MODE_PRIVATE, null)
+        db.delete("expense","id = ?",arrayOf(expenseId.toString()))
+        loadExpensedata(context)
+    }
+
+    fun updateExpense(context: Context,expense : ExpenseRoot){
+        val db = context.openOrCreateDatabase("expensetracker", Context.MODE_PRIVATE, null)
+        val contentvalue= ContentValues()
+        contentvalue.put("TITLE", expense.title)
+        contentvalue.put("AMOUNT", expense.amount)
+        contentvalue.put("CATEGORY", expense.category)
+        contentvalue.put("DATE", expense.date)
+
+        db.update("expense",contentvalue,"ID=?", arrayOf(expense.id.toString()))
+        loadExpensedata(context)
+    }
 }

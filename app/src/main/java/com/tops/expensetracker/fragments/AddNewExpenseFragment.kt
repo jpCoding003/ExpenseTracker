@@ -44,9 +44,10 @@ class AddNewExpenseFragment : Fragment() {
             val amount = binding.etAmount.text.toString()
             val expenseCategory = binding.etCategory.text.toString()
             val date = binding.etDate.text.toString()
-//            if (title.isEmpty() || amount.isEmpty() || expenseCategory.isEmpty() || date.isEmpty()){
-//                Toast.makeText(context," Please Fill Complete Details!", Toast.LENGTH_LONG).show()
-//            }else{
+
+            if (title.isEmpty() || amount.isEmpty() || expenseCategory.isEmpty() || date.isEmpty()){
+                Toast.makeText(context," Please Fill Complete Details!", Toast.LENGTH_LONG).show()
+            }else{
                 val contentValue = ContentValues()
 
                 contentValue.put("TITLE", title)
@@ -61,13 +62,8 @@ class AddNewExpenseFragment : Fragment() {
             } else {
                 Toast.makeText(context, "Insert failed", Toast.LENGTH_SHORT).show()
             }
-
-            Log.i(" DataBase"," Data ${db}")
                 findNavController().navigate(R.id.action_addNewExpenseFragment_to_homeFragment)
-
-//            }
-
+            }
         }
     }
-
 }

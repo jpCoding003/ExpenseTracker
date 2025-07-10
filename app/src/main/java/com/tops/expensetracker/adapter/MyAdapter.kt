@@ -1,14 +1,18 @@
 package com.tops.expensetracker.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.tops.expensetracker.databinding.ExpenseRowItemBinding
 import com.tops.expensetracker.model.ExpenseRoot
 
-class MyAdapter(private val expense: List<ExpenseRoot>): RecyclerView.Adapter<MyAdapter.ExpenseViewHolder>() {
+class MyAdapter(private var expense: List<ExpenseRoot>, private val onDelete: (Int) -> Unit, private val onEdit: (ExpenseRoot)-> Unit ): RecyclerView.Adapter<MyAdapter.ExpenseViewHolder>() {
 
+
+    fun submitList(newlist: List<ExpenseRoot>){
+        expense = newlist
+        notifyDataSetChanged()
+    }
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -24,6 +28,13 @@ class MyAdapter(private val expense: List<ExpenseRoot>): RecyclerView.Adapter<My
         val exp = expense[position]
         holder.binding.tvtitle.text = exp.title
         holder.binding.tvprice.text = "$${exp.amount}"
+
+        holder.binding.btndelete.setOnClickListener {
+            onDelete(exp.id)
+        }
+        holder.binding.btnedit.setOnClickListener {
+            onEdit(exp)
+        }
     }
 
     override fun getItemCount(): Int = expense.size

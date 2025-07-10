@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="15dp"
+    android:background="#43A047"
     android:orientation="vertical"
     tools:context=".fragments.AddNewExpenseFragment">
 
@@ -13,6 +14,7 @@
         android:layout_height="wrap_content"
         android:text="New Expense"
         android:textSize="35sp"
+        android:textColor="@color/white"
         android:layout_marginStart="15dp"
         android:layout_marginTop="39dp"
         android:fontFamily="cursive"
@@ -24,7 +26,7 @@
         app:cardCornerRadius="30dp"
         app:cardElevation="7dp"
         android:layout_marginTop="85dp"
-        android:backgroundTint="#66BB6A">
+        android:backgroundTint="#78D97D">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -38,6 +40,7 @@
             android:layout_height="wrap_content">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etTitle"
+                android:textColor="@color/black"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Title" />
@@ -50,6 +53,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etAmount"
+                android:textColor="@color/black"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Amount"
@@ -63,6 +67,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etCategory"
+                android:textColor="@color/black"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Category"/>
@@ -70,6 +75,7 @@
 
         <EditText
             android:id="@+id/etDate"
+            android:textColor="@color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
