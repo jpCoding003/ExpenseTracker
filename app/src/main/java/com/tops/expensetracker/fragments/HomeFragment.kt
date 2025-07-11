@@ -48,21 +48,20 @@ class HomeFragment : Fragment() {
 //                expense.id,
 //                expense.title,
 //                expense.amount,
-//                expense.category,
+//                expense.category,                           // Pass Data Using Navigation
 //                expense.date
 //            )
 //            findNavController().navigate(action)
 
             val bundle = Bundle().apply {
-                putInt("expenseId", expense.id)
-                putString("title", expense.title)
-                putString("amount", expense.amount)
-                putString("category", expense.category)
-                putString("date", expense.date)
+                putParcelable("expense",expense)
             }
 
             findNavController().navigate(R.id.action_homeFragment_to_addNewExpenseFragment, bundle)
         })
+
+        // ✅ Set adapter to RecyclerView
+        binding.rvExpense.adapter = adapter
 
         expenseviewmodel.expense.observe(viewLifecycleOwner, Observer{
             expenselist->  adapter.submitList(expenselist)

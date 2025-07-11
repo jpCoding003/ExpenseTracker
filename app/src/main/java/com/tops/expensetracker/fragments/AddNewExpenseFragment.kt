@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.findNavController
 import com.tops.expensetracker.R
 import com.tops.expensetracker.databinding.FragmentAddNewExpenseBinding
+import com.tops.expensetracker.model.ExpenseRoot
 
 
 class AddNewExpenseFragment : Fragment() {
@@ -21,6 +22,7 @@ class AddNewExpenseFragment : Fragment() {
     private lateinit var binding: FragmentAddNewExpenseBinding
     private lateinit var  db: SQLiteDatabase
 
+    private var expenseId: Int = -1 // ✅ Hold expenseId for edit mode
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,6 +39,20 @@ class AddNewExpenseFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // ✅ Get data from Bundle
+//        expenseId = arguments?.getInt("expenseId", -1) ?: -1
+        val expense = arguments?.getParcelable<ExpenseRoot>("expense")
+        val isEditMode = expense != null
+
+        // ✅ Set data in EditText if edit mode
+        if (isEditMode) {
+            binding.etTitle.setText(expense.title)
+            binding.etAmount.setText(expense.amount)
+            binding.etCategory.setText(expense.category)
+            binding.etDate.setText(expense.date)
+            binding.btnaddExpense.text = "Update Expense"
+            expenseId = expense?.id?: -1
+        }
 
 
         binding.btnaddExpense.setOnClickListener {
@@ -47,21 +63,33 @@ class AddNewExpenseFragment : Fragment() {
 
             if (title.isEmpty() || amount.isEmpty() || expenseCategory.isEmpty() || date.isEmpty()){
                 Toast.makeText(context," Please Fill Complete Details!", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
             }else{
-                val contentValue = ContentValues()
+                val contentValue = ContentValues().apply {
+                    put("TITLE", title)
+                    put("AMOUNT", amount)
+                    put("CATEGORY", expenseCategory)
+                    put("DATE", date)
+                }
 
-                contentValue.put("TITLE", title)
-                contentValue.put("AMOUNT", amount)
-                contentValue.put("CATEGORY", expenseCategory)
-                contentValue.put("DATE", date)
 
-            val result = db.insert("expense" ,null,contentValue)
+                if (isEditMode && expenseId!= -1) {
+                    // ✅ Update expense
+                    val rows = db.update("expense", contentValue, "ID = ?", arrayOf(expenseId.toString()))
+                    if (rows > 0)
+                        Toast.makeText(context, "Expense updated", Toast.LENGTH_SHORT).show()
+                    else
+                        Toast.makeText(context, "Update failed", Toast.LENGTH_SHORT).show()
+                } else {
+                    // ✅ Insert new expense
+                    val result = db.insert("expense", null, contentValue)
+                    if (result != -1L)
+                        Toast.makeText(context, "Expense added", Toast.LENGTH_SHORT).show()
+                    else
+                        Toast.makeText(context, "Insert failed", Toast.LENGTH_SHORT).show()
+                }
 
-            if (result != -1L) {
-                Toast.makeText(context, "Insert successful", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(context, "Insert failed", Toast.LENGTH_SHORT).show()
-            }
+
                 findNavController().navigate(R.id.action_addNewExpenseFragment_to_homeFragment)
             }
         }
