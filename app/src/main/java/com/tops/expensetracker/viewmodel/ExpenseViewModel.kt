@@ -2,21 +2,28 @@ package com.tops.expensetracker.viewmodel
 
 import android.content.ContentValues
 import android.content.Context
-import android.database.sqlite.SQLiteDatabase
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.tops.expensetracker.model.ExpenseRoot
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 
 class ExpenseViewModel: ViewModel() {
 
-    private lateinit var db: SQLiteDatabase
+//    private lateinit var db: SQLiteDatabase
     private val _expense = MutableLiveData<List<ExpenseRoot>>()
     val expense : LiveData<List<ExpenseRoot>> = _expense
 
+    private val _totalAmount = MutableLiveData<Int>()
+    val totalAmount: LiveData<Int> = _totalAmount
+
+
     fun loadExpensedata(context: Context){
-        val db: SQLiteDatabase = context.openOrCreateDatabase("expensetracker", Context.MODE_PRIVATE, null)
+        val today = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+        val db = context.openOrCreateDatabase("expensetracker", Context.MODE_PRIVATE, null)
         val cursor = db.rawQuery(" SELECT * FROM expense", null)
         val expenselist = mutableListOf<ExpenseRoot>()
 
@@ -28,13 +35,20 @@ class ExpenseViewModel: ViewModel() {
                 val category = cursor.getString(3)
                 val date = cursor.getString(4)
 
-                val exp = ExpenseRoot(id,title,amount,category,date)
+                val exp = ExpenseRoot(
+                    id, title, amount, category,
+                    date = today
+                )
                 expenselist.add(exp)
 
             }while (cursor.moveToNext())
         }
         cursor.close()
         _expense.value = expenselist
+
+        // ✅ Compute total and update LiveData
+        val total = expenselist.sumOf { it.amount.toIntOrNull() ?: 0 }
+        _totalAmount.value = total
     }
 
     fun deleteExpense(context: Context,expenseId: Int){
@@ -49,9 +63,21 @@ class ExpenseViewModel: ViewModel() {
         contentvalue.put("TITLE", expense.title)
         contentvalue.put("AMOUNT", expense.amount)
         contentvalue.put("CATEGORY", expense.category)
-        contentvalue.put("DATE", expense.date)
+//        contentvalue.put("DATE", expense.date)
 
         db.update("expense",contentvalue,"ID=?", arrayOf(expense.id.toString()))
         loadExpensedata(context)
     }
+
+//    fun storecurrentdate(context: Context): Int {
+//        val db = context.openOrCreateDatabase("expensetracker", Context.MODE_PRIVATE, null)
+//        val cursor = db.rawQuery("SELECT SUM(amount) FROM expense", null)
+//
+//        var totalAmount = 0
+//        if (cursor.moveToFirst()) {
+//            totalAmount = cursor.getInt(0)
+//        }
+//        cursor.close()
+//        return totalAmount
+//    }
 }

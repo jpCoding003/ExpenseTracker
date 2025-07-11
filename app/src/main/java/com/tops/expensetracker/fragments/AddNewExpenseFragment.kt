@@ -15,6 +15,9 @@ import androidx.navigation.fragment.findNavController
 import com.tops.expensetracker.R
 import com.tops.expensetracker.databinding.FragmentAddNewExpenseBinding
 import com.tops.expensetracker.model.ExpenseRoot
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 
 class AddNewExpenseFragment : Fragment() {
@@ -30,14 +33,17 @@ class AddNewExpenseFragment : Fragment() {
     ): View? {
         binding= FragmentAddNewExpenseBinding.inflate(layoutInflater)
         (activity as AppCompatActivity).supportActionBar?.setTitle("Add New Expenses")
+
         db = requireActivity().openOrCreateDatabase("expensetracker", Context.MODE_PRIVATE, null)
 //        db.execSQL("DROP TABLE IF EXISTS  expense")
-        db.execSQL("CREATE TABLE IF NOT EXISTS expense(ID INTEGER PRIMARY KEY AUTOINCREMENT, TITLE VARCHAR, AMOUNT VARCHAR, CATEGORY VARCHAR,DATE VARCHAR);")
+        db.execSQL("CREATE TABLE IF NOT EXISTS expense(ID INTEGER PRIMARY KEY AUTOINCREMENT, TITLE VARCHAR, AMOUNT VARCHAR, CATEGORY VARCHAR,DATE  TEXT DEFAULT (datetime('now','localtime')));")
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.etDate.visibility = View.GONE
 
         // ✅ Get data from Bundle
 //        expenseId = arguments?.getInt("expenseId", -1) ?: -1
@@ -56,12 +62,12 @@ class AddNewExpenseFragment : Fragment() {
 
 
         binding.btnaddExpense.setOnClickListener {
+            val today = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
             val title = binding.etTitle.text.toString()
             val amount = binding.etAmount.text.toString()
             val expenseCategory = binding.etCategory.text.toString()
-            val date = binding.etDate.text.toString()
 
-            if (title.isEmpty() || amount.isEmpty() || expenseCategory.isEmpty() || date.isEmpty()){
+            if (title.isEmpty() || amount.isEmpty() || expenseCategory.isEmpty() ){
                 Toast.makeText(context," Please Fill Complete Details!", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }else{
@@ -69,7 +75,7 @@ class AddNewExpenseFragment : Fragment() {
                     put("TITLE", title)
                     put("AMOUNT", amount)
                     put("CATEGORY", expenseCategory)
-                    put("DATE", date)
+                    put("DATE", today)
                 }
 
 

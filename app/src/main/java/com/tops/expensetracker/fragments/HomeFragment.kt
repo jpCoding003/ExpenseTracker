@@ -1,5 +1,7 @@
 package com.tops.expensetracker.fragments
 
+import android.content.Context
+import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -38,28 +40,20 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        expenseviewmodel.loadExpensedata(requireContext())
+        expenseviewmodel.loadExpensedata(requireActivity())
+        expenseviewmodel.totalAmount.observe(viewLifecycleOwner) { total ->
+            binding.tvTotal.text = "₹ $total"
+        }
 
         binding.rvExpense.layoutManager = LinearLayoutManager(requireContext())
-        adapter = MyAdapter(emptyList(), onDelete = {
-            id-> expenseviewmodel.deleteExpense(requireContext(),id)
-        }, onEdit = { expense->
-//            val action = HomeFragmentDirections.actionHomeFragmentToAddNewExpenseFragment(
-//                expense.id,
-//                expense.title,
-//                expense.amount,
-//                expense.category,                           // Pass Data Using Navigation
-//                expense.date
-//            )
-//            findNavController().navigate(action)
-
-            val bundle = Bundle().apply {
-                putParcelable("expense",expense)
+        adapter = MyAdapter(emptyList(),
+            onDelete = { id-> expenseviewmodel.deleteExpense(requireContext(),id) },
+            onEdit = { expense-> val bundle = Bundle().apply {
+                putParcelable("expense",expense)                // Bundle--> Data Passed from Fragment to Fragment
             }
 
             findNavController().navigate(R.id.action_homeFragment_to_addNewExpenseFragment, bundle)
         })
-
         // ✅ Set adapter to RecyclerView
         binding.rvExpense.adapter = adapter
 
@@ -70,6 +64,9 @@ class HomeFragment : Fragment() {
         binding.btnaddExp.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_addNewExpenseFragment)
         }
+
+//        val currentDate = expenseviewmodel.storecurrentdate(requireContext())
+//        binding.tvTotal.text = currentDate.toString()
     }
 
 
