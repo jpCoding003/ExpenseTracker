@@ -46,7 +46,6 @@ class AddNewExpenseFragment : Fragment() {
         binding.etDate.visibility = View.GONE
 
         // ✅ Get data from Bundle
-//        expenseId = arguments?.getInt("expenseId", -1) ?: -1
         val expense = arguments?.getParcelable<ExpenseRoot>("expense")
         val isEditMode = expense != null
 
@@ -62,7 +61,7 @@ class AddNewExpenseFragment : Fragment() {
 
 
         binding.btnaddExpense.setOnClickListener {
-            val today = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+            val today = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(Date())
             val title = binding.etTitle.text.toString()
             val amount = binding.etAmount.text.toString()
             val expenseCategory = binding.etCategory.text.toString()

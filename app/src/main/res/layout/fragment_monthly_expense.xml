@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="12dp"
+    tools:context=".fragments.MonthlyExpenseFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+    <TextView
+        android:padding="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cornerRadius="4dp"
+        android:textSize="16dp"
+        android:textColor="@color/white"
+        android:background="@drawable/bg_rounded_corner"
+        android:layout_centerInParent="true"
+        android:text=" From : " />
+
+<!--    <TextView-->
+<!--        android:id="@+id/tvSelectedDate"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Hello"-->
+<!--        android:layout_weight="1"-->
+<!--        android:layout_below="@id/btnDatePicker"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:padding="16dp"-->
+<!--        android:textSize="18sp" />-->
+
+
+        <TextView
+            android:id="@+id/tvfromSelectedDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Select Date"
+            android:padding="12dp"
+            android:drawableEnd="@android:drawable/ic_menu_my_calendar"
+        android:drawablePadding="8dp"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:clickable="true"
+        android:focusable="true" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:padding="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cornerRadius="4dp"
+            android:textSize="16dp"
+            android:textColor="@color/white"
+            android:background="@drawable/bg_rounded_corner"
+            android:layout_centerInParent="true"
+            android:text="    To   : " />
+
+
+        <TextView
+            android:id="@+id/tvUptoSelectedDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Select Date"
+            android:padding="12dp"
+            android:drawableEnd="@android:drawable/ic_menu_my_calendar"
+            android:drawablePadding="8dp"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:clickable="true"
+            android:focusable="true" />
+
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnshow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#2E7D32"
+        android:text="Show"
+        app:cornerRadius="5dp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginTop="12dp"
+        android:id="@+id/rvMonthlyTrans"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>

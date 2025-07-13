@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_homeFragment_to_addNewExpenseFragment"
             app:destination="@id/addNewExpenseFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_monthlyExpenseFragment"
+            app:destination="@id/monthlyExpenseFragment" />
     </fragment>
     <fragment
         android:id="@+id/addNewExpenseFragment"
@@ -22,7 +25,16 @@
         <action
             android:id="@+id/action_addNewExpenseFragment_to_homeFragment"
             app:destination="@id/homeFragment"
-            app:popUpTo="@id/homeFragment"
+            app:popUpTo="@id/addNewExpenseFragment"
             app:popUpToInclusive="true"/>
+    </fragment>
+    <fragment
+        android:id="@+id/monthlyExpenseFragment"
+        android:name="com.tops.expensetracker.fragments.MonthlyExpenseFragment"
+        android:label="fragment_monthly_expense"
+        tools:layout="@layout/fragment_monthly_expense" >
+        <action
+            android:id="@+id/action_monthlyExpenseFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
     </fragment>
 </navigation>

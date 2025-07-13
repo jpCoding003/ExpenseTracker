@@ -63,21 +63,10 @@ class ExpenseViewModel: ViewModel() {
         contentvalue.put("TITLE", expense.title)
         contentvalue.put("AMOUNT", expense.amount)
         contentvalue.put("CATEGORY", expense.category)
-//        contentvalue.put("DATE", expense.date)
 
         db.update("expense",contentvalue,"ID=?", arrayOf(expense.id.toString()))
         loadExpensedata(context)
     }
 
-//    fun storecurrentdate(context: Context): Int {
-//        val db = context.openOrCreateDatabase("expensetracker", Context.MODE_PRIVATE, null)
-//        val cursor = db.rawQuery("SELECT SUM(amount) FROM expense", null)
-//
-//        var totalAmount = 0
-//        if (cursor.moveToFirst()) {
-//            totalAmount = cursor.getInt(0)
-//        }
-//        cursor.close()
-//        return totalAmount
-//    }
+
 }
